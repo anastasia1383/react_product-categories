@@ -111,6 +111,10 @@ export const App = () => {
                   type="text"
                   className="input"
                   placeholder="Search"
+                  value={query}
+                  onChange={(event) => {
+                    setQuery(event.target.value);
+                  }}
                 />
 
                 <span className="icon is-left">
@@ -123,6 +127,9 @@ export const App = () => {
                     data-cy="ClearButton"
                     type="button"
                     className="delete"
+                    onClick={() => {
+                      setQuery('');
+                    }}
                   />
                 </span>
               </p>
