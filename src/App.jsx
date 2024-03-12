@@ -1,18 +1,18 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import React, { useState } from "react";
-import classNames from "classnames";
+import React, { useState } from 'react';
+import classNames from 'classnames';
 
-import "./App.scss";
+import './App.scss';
 
-import usersFromServer from "./api/users";
-import categoriesFromServer from "./api/categories";
-import productsFromServer from "./api/products";
+import usersFromServer from './api/users';
+import categoriesFromServer from './api/categories';
+import productsFromServer from './api/products';
 
 const products = productsFromServer.map((product) => {
   const category = categoriesFromServer.find(
-    (cat) => cat.id === product.categoryId
+    cat => cat.id === product.categoryId,
   );
-  const user = usersFromServer.find((person) => person.id === category.ownerId);
+  const user = usersFromServer.find(person => person.id === category.ownerId);
 
   return {
     product,
@@ -22,7 +22,7 @@ const products = productsFromServer.map((product) => {
 });
 
 function getPreparedProducts(productsArray, option) {
-  const { query = "", selectedUser = "all", selectedProduct = "all" } = option;
+  const { query = '', selectedUser = 'all', selectedProduct = 'all' } = option;
 
   let preparedProducts = [...productsArray];
 
@@ -31,20 +31,20 @@ function getPreparedProducts(productsArray, option) {
   if (normalizedQuery) {
     preparedProducts = preparedProducts
       .filter(
-        (prepared) => prepared.product.name
+        prepared => prepared.product.name
           .toLowerCase().includes(normalizedQuery),
       );
   }
 
-  if (selectedUser !== "all") {
+  if (selectedUser !== 'all') {
     preparedProducts = preparedProducts.filter(
-      (prepared) => prepared.user.name === selectedUser
+      prepared => prepared.user.name === selectedUser,
     );
   }
 
-  if (selectedProduct !== "all") {
+  if (selectedProduct !== 'all') {
     preparedProducts = preparedProducts.filter(
-      (prepared) => prepared.product.name === selectedProduct
+      prepared => prepared.category.title === selectedProduct,
     );
   }
 
@@ -52,9 +52,9 @@ function getPreparedProducts(productsArray, option) {
 }
 
 export const App = () => {
-  const [selectedUser, setSelectedUser] = useState("all");
-  const [selectedProduct, setSelectedProduct] = useState("all");
-  const [query, setQuery] = useState("");
+  const [selectedUser, setSelectedUser] = useState('all');
+  const [selectedProduct, setSelectedProduct] = useState('all');
+  const [query, setQuery] = useState('');
 
   const visibleProducts = getPreparedProducts(products, {
     query,
@@ -63,9 +63,9 @@ export const App = () => {
   });
 
   const resetFilters = () => {
-    setQuery("");
-    setSelectedProduct("all");
-    setSelectedUser("all");
+    setQuery('');
+    setSelectedProduct('all');
+    setSelectedUser('all');
   };
 
   return (
@@ -81,9 +81,9 @@ export const App = () => {
               <a
                 data-cy="FilterAllUsers"
                 href="#/"
-                className={classNames({ "is-active": selectedUser === "all" })}
+                className={classNames({ 'is-active': selectedUser === 'all' })}
                 onClick={() => {
-                  setSelectedUser("all");
+                  setSelectedUser('all');
                 }}
               >
                 All
@@ -94,7 +94,7 @@ export const App = () => {
                   data-cy="FilterUser"
                   href="#/"
                   key={id}
-                  className={classNames({ "is-active": selectedUser === name })}
+                  className={classNames({ 'is-active': selectedUser === name })}
                   onClick={() => {
                     setSelectedUser(name);
                   }}
@@ -134,7 +134,7 @@ export const App = () => {
                 data-cy="AllCategories"
                 className="button is-success mr-6 is-outlined"
                 onClick={() => {
-                  setSelectedProduct("all");
+                  setSelectedProduct('all');
                 }}
               >
                 All
@@ -144,8 +144,8 @@ export const App = () => {
                 <a
                   key={id}
                   data-cy="Category"
-                  className={classNames("button mr-2 my-1", {
-                    "is-info": selectedProduct === title,
+                  className={classNames('button mr-2 my-1', {
+                    'is-info': selectedProduct === title,
                   })}
                   href="#/"
                   onClick={() => {
@@ -236,8 +236,8 @@ export const App = () => {
                     <td
                       data-cy="ProductUser"
                       className={classNames({
-                        "has-text-link": user.sex === "m",
-                        "has-text-danger": user.sex === "f",
+                        'has-text-link': user.sex === 'm',
+                        'has-text-danger': user.sex === 'f',
                       })}
                     >
                       {user.name}
