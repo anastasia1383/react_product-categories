@@ -178,7 +178,7 @@ export const App = () => {
         </div>
 
         <div className="box table-container">
-          {visibleProducts ? (
+          {visibleProducts.length ? (
             <table
               data-cy="ProductTable"
               className="table is-striped is-narrow is-fullwidth"
