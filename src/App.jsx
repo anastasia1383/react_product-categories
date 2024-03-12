@@ -22,7 +22,7 @@ const products = productsFromServer.map((product) => {
 });
 
 function getPreparedProducts(productsArray, option) {
-  const { query = '', selectedUser = 'all', selectedProduct = 'all' } = option;
+  const { query = '', selectedUser = 'all', selectedProduct = [] } = option;
 
   let preparedProducts = [...productsArray];
 
@@ -30,10 +30,8 @@ function getPreparedProducts(productsArray, option) {
 
   if (normalizedQuery) {
     preparedProducts = preparedProducts
-      .filter(
-        prepared => prepared.product.name
-          .toLowerCase().includes(normalizedQuery),
-      );
+      .filter(prepared => prepared.product.name
+        .toLowerCase().includes(normalizedQuery));
   }
 
   if (selectedUser !== 'all') {
@@ -42,10 +40,9 @@ function getPreparedProducts(productsArray, option) {
     );
   }
 
-  if (selectedProduct !== 'all') {
-    preparedProducts = preparedProducts.filter(
-      prepared => prepared.category.title === selectedProduct,
-    );
+  if (selectedProduct.length) {
+    preparedProducts = preparedProducts
+      .filter(prepared => selectedProduct.includes(prepared.category.title));
   }
 
   return preparedProducts;
@@ -53,7 +50,7 @@ function getPreparedProducts(productsArray, option) {
 
 export const App = () => {
   const [selectedUser, setSelectedUser] = useState('all');
-  const [selectedProduct, setSelectedProduct] = useState('all');
+  const [selectedProduct, setSelectedProduct] = useState([]);
   const [query, setQuery] = useState('');
 
   const visibleProducts = getPreparedProducts(products, {
@@ -64,7 +61,7 @@ export const App = () => {
 
   const resetFilters = () => {
     setQuery('');
-    setSelectedProduct('all');
+    setSelectedProduct([]);
     setSelectedUser('all');
   };
 
@@ -141,22 +138,29 @@ export const App = () => {
                 data-cy="AllCategories"
                 className="button is-success mr-6 is-outlined"
                 onClick={() => {
-                  setSelectedProduct('all');
+                  setSelectedProduct([]);
                 }}
               >
                 All
               </a>
-
               {categoriesFromServer.map(({ id, title }) => (
                 <a
                   key={id}
                   data-cy="Category"
                   className={classNames('button mr-2 my-1', {
-                    'is-info': selectedProduct === title,
+                    'is-info': selectedProduct.includes(title),
                   })}
                   href="#/"
                   onClick={() => {
-                    setSelectedProduct(title);
+                    let newValue = [...selectedProduct];
+
+                    if (selectedProduct.includes(title)) {
+                      newValue = newValue.filter(item => item !== title);
+                    } else {
+                      newValue.push(title);
+                    }
+
+                    setSelectedProduct(newValue);
                   }}
                 >
                   {title}
